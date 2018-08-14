@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_UPDATE_REQUEST_SUCCESS = "success";
     private static final String KEY_UPDATE_REQUEST_MESSAGE = "message";
 
+    private static final String SEPARATOR_QR_CODE = ";";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
         if(result.getContents() == null) {
             Toast.makeText(this,"QR scan cancelled",Toast.LENGTH_SHORT).show();
         } else {
-            //Toast.makeText(this,"Scanned: " + result.getContents(),Toast.LENGTH_SHORT).show();
-            updateUserTimbriRequest(result.getContents());
+            String[] resultArray = result.getContents().split(SEPARATOR_QR_CODE);
+            updateUserTimbriRequest(resultArray[0],resultArray[1]);
         }
     }
 
@@ -104,10 +106,11 @@ public class MainActivity extends AppCompatActivity {
         new IntentIntegrator(this).initiateScan();
     }
 
-    private void updateUserTimbriRequest(final String emailUser)
+    private void updateUserTimbriRequest(final String emailUser,final String timbriToAdd)
     {
         Map<String,String> params = new HashMap<>();
         params.put("email",emailUser);
+        params.put("timbri",timbriToAdd);
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -133,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d("UPDATE_TIMBRI_ERROR",error.toString());
                         if (error instanceof TimeoutError){
                             Toast.makeText(getApplicationContext(), "TimeOut Error!", Toast.LENGTH_SHORT).show();
                         } else if (error instanceof NoConnectionError) {
