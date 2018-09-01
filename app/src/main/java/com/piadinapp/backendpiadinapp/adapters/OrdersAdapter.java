@@ -9,16 +9,26 @@ import android.widget.TextView;
 
 import com.piadinapp.backendpiadinapp.R;
 import com.piadinapp.backendpiadinapp.model.Ordine;
+import com.piadinapp.backendpiadinapp.utility.RecyclerViewClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
-    private List<Ordine> mData;
+    private RecyclerViewClickListener mListener;
+    private List<Ordine> mData = new ArrayList<>();
 
     //Data passed in constructor
-    public OrdersAdapter(List<Ordine> data)
+    public OrdersAdapter(RecyclerViewClickListener listener)
     {
-        mData = data;
+        mListener = listener;
+    }
+
+    public void updateData(List<Ordine> dataset)
+    {
+        mData.clear();
+        mData.addAll(dataset);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -27,7 +37,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item,parent,false);
 
-        return new OrderViewHolder(view);
+        return new OrderViewHolder(view,mListener);
     }
 
     @Override
@@ -48,14 +58,15 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     }
 
     //View holder custom class
-    public static class OrderViewHolder extends RecyclerView.ViewHolder {
+    public static class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mId;
         private TextView mDate;
         private TextView mEmail;
         private TextView mPhone;
         private TextView mPiadineNum;
+        private RecyclerViewClickListener mListener;
 
-        public OrderViewHolder(View itemView)
+        public OrderViewHolder(View itemView, RecyclerViewClickListener listener)
         {
             super(itemView);
 
@@ -64,6 +75,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             mEmail = (TextView) itemView.findViewById(R.id.tvEmail);
             mPhone = (TextView) itemView.findViewById(R.id.tvPhone);
             mPiadineNum = (TextView) itemView.findViewById(R.id.tvNumPiadine);
+            mListener = listener;
+            itemView.setOnClickListener(this);
         }
 
         public void setId(int id)
@@ -87,6 +100,12 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         {
             String finalTxt = "Piadine: " + String.valueOf(number);
             mPiadineNum.setText(finalTxt);
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            mListener.onClick(v,getAdapterPosition());
         }
     }
 }
