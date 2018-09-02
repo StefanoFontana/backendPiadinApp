@@ -11,12 +11,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.piadinapp.backendpiadinapp.frags.ContentRequestListener;
 import com.piadinapp.backendpiadinapp.frags.OrderListFragment;
 import com.piadinapp.backendpiadinapp.model.Ordine;
+import com.piadinapp.backendpiadinapp.utility.GenericCallback;
+import com.piadinapp.backendpiadinapp.utility.OnlineHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -24,6 +31,17 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,ContentRequestListener {
 
     private static final String ORDER_EXTRA = "selected_order";
+
+    private static final String JSON_ORDER_ARRAY       = "ordini";
+    private static final String JSON_ID_FIELD          = "id";
+    private static final String JSON_EMAIL_FIELD       = "email";
+    private static final String JSON_PHONE_FIELD       = "phone";
+    private static final String JSON_DATA_FIELD        = "data";
+    private static final String JSON_PREZZO_FIELD      = "prezzo";
+    private static final String JSON_DESCRIZIONE_FIELD = "descrizione";
+    private static final String JSON_NOTE_FIELD        = "note";
+    private static final String JSON_FASCIA_FIELD      = "fascia";
+    private static final String JSON_COLOR_FIELD       = "colore_fascia";
 
     private Toolbar mToolbar;
     private OrderListFragment mFragOrderList;
@@ -54,9 +72,6 @@ public class MainActivity extends AppCompatActivity
         mFragTransaction = mFragManager.beginTransaction();
         mFragTransaction.replace(R.id.flFragContainer,mFragOrderList,"FragOrderList");
         mFragTransaction.commit();
-
-        //Create fragment frag
-        //todo...
     }
 
     @Override
@@ -64,8 +79,12 @@ public class MainActivity extends AppCompatActivity
     {
         super.onStart();
 
+        updateOrderList();
+
         //Test orders
-        Ordine test1 = new Ordine(1,"stefon1992@gmail.com","34237374406","22/03/2019",5.5f,"Pippo","Nota1","3",1);
+        //todo update orders from server
+        Ordine test1 = new Ordine(1,"stefon1992@gmail.com","34237374406","22/03/2019",
+                5.5f,"[Numero: 02; Piadina; Normale; Speck, Scamorza, Rucola; 5.0; 1]","Nota1","3",1);
         Ordine test2 = new Ordine(2,"stefon1992@gmail.com","34237374406","01/09/2018",3f,"Pippo2","Nota2","5",2);
         ArrayList<Ordine> list = new ArrayList<>();
         list.add(test1);
@@ -114,9 +133,9 @@ public class MainActivity extends AppCompatActivity
 
         if(id == R.id.nav_orders) {
             //Show order list frag
-        } else if(id == R.id.nav_fasce) {
+        }/* else if(id == R.id.nav_fasce) {
             //Show fasce frag
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -128,10 +147,61 @@ public class MainActivity extends AppCompatActivity
     //Called whe user selects an order from order list
     public void onOrderSelected(Ordine selected)
     {
-        //todo open order details act
         Intent detailsIntent = new Intent(this,OrderDetailsActivity.class);
         detailsIntent.putExtra(ORDER_EXTRA,selected);
         startActivity(detailsIntent);
     }
+
+    @Override
+    public void onOrderListRefreshRequest() {
+        updateOrderList();
+    }
     //--------------------------------------------------------
+
+    private void updateOrderList()
+    {
+        GenericCallback genericCallback = new GenericCallback() {
+            @Override
+            public void onSuccess(JSONObject resultData) {
+                mFragOrderList.onOrderListChanged(fillOrderList(resultData));
+            }
+        };
+
+        OnlineHelper onlineHelper = new OnlineHelper(this);
+        onlineHelper.getOrderList(genericCallback);
+    }
+
+    private ArrayList<Ordine> fillOrderList(JSONObject response)
+    {
+        ArrayList<Ordine> list = new ArrayList<>();
+
+        int id,colore;
+        String mail,phone,data,descrizione,nota,fascia;
+        double prezzo;
+
+        Ordine ordine;
+        try {
+            JSONArray orderArray = response.getJSONArray(JSON_ORDER_ARRAY);
+            for(int i = 0; i < orderArray.length(); i++) {
+                JSONObject obj = orderArray.getJSONObject(i);
+                id = obj.getInt(JSON_ID_FIELD);
+                mail = obj.getString(JSON_EMAIL_FIELD);
+                phone = obj.getString(JSON_PHONE_FIELD);
+                data = obj.getString(JSON_DATA_FIELD);
+                descrizione = obj.getString(JSON_DESCRIZIONE_FIELD);
+                nota = obj.getString(JSON_NOTE_FIELD);
+                prezzo = obj.getDouble(JSON_PREZZO_FIELD);
+                fascia = obj.getString(JSON_FASCIA_FIELD);
+                colore = obj.getInt(JSON_COLOR_FIELD);
+
+                ordine = new Ordine(id,mail,phone,data,(float)prezzo,descrizione,nota,fascia,colore);
+                list.add(ordine);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return list;
+        }
+
+        return list;
+    }
 }

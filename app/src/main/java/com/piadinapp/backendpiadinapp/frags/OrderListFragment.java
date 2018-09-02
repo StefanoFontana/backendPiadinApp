@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ public class OrderListFragment extends Fragment {
     private RecyclerView mRvOrders;
     private OrdersAdapter mOrdersAdapter;
     private ContentRequestListener mContentListener;
+    private SwipeRefreshLayout mSwipeRefresh;
 
     public OrderListFragment()
     {
@@ -57,6 +59,15 @@ public class OrderListFragment extends Fragment {
         mOrdersAdapter = new OrdersAdapter(listener);
         mRvOrders.setAdapter(mOrdersAdapter);
 
+        //Setup swipe refresh view
+        mSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.srlOrderRefresh);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mContentListener.onOrderListRefreshRequest();
+            }
+        });
+
         return view;
     }
 
@@ -70,5 +81,6 @@ public class OrderListFragment extends Fragment {
     public void onOrderListChanged(ArrayList<Ordine> newList)
     {
         mOrdersAdapter.updateData(newList);
+        mSwipeRefresh.setRefreshing(false);
     }
 }

@@ -1,11 +1,24 @@
 package com.piadinapp.backendpiadinapp.model;
 
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.piadinapp.backendpiadinapp.adapters.OrdersAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ordine implements Parcelable {
+    private static final String ITEM_SEPARATOR = "-";
+    private static final String PROPERTY_SEPARATOR = ";";
+    private static final int ITEM_NAME_ID        = 0;
+    private static final int ITEM_TYPE_ID        = 1;
+    private static final int ITEM_IMPASTO_ID     = 2;
+    private static final int ITEM_INGREDIENTS_ID = 3;
+    private static final int ITEM_PRICE_ID       = 4;
+    private static final int ITEM_QUANTITY_ID    = 5;
+
     private int id;
     private String email;
     private String phone;
@@ -112,4 +125,32 @@ public class Ordine implements Parcelable {
         fasciaColor = in.readInt();
     }
     //----------------------------------------------------------------
+
+    public ArrayList<OrdineItem> getOrderItems()
+    {
+        ArrayList<OrdineItem> finalList = new ArrayList<>();
+        OrdineItem ordineItem;
+
+        String[] itemArray = elementsDescription.split(ITEM_SEPARATOR);
+        float price;
+        int quantity;
+        for (String item:itemArray) {
+            String[] properties = item.split(PROPERTY_SEPARATOR);
+            if(properties.length != 6)
+                continue;
+
+            price = Float.parseFloat(properties[ITEM_PRICE_ID].trim());
+            quantity = Integer.parseInt(properties[ITEM_QUANTITY_ID].trim().substring(0,1));
+            ordineItem = new OrdineItem(properties[ITEM_NAME_ID].substring(1,properties[ITEM_NAME_ID].length()),
+                    properties[ITEM_TYPE_ID],
+                    properties[ITEM_IMPASTO_ID],
+                    properties[ITEM_INGREDIENTS_ID],
+                    price,
+                    quantity);
+
+            finalList.add(ordineItem);
+        }
+
+        return finalList;
+    }
 }

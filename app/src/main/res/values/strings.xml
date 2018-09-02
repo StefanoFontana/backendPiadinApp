@@ -21,4 +21,12 @@
     <string name="title_activity_order_details">OrderDetailsActivity</string>
     <!-- Order details act -->
     <string name="title_details_order">Dettagli Ordine</string>
+    <string name="lbl_id_text">Ordine ID: </string>
+    <string name="lbl_email_text">Email: </string>
+    <string name="lbl_phone_text">Telefono: </string>
+    <string name="lbl_date_text">Data: </string>
+    <string name="lbl_fascia_text">Fascia oraria: </string>
+    <string name="lbl_color_text">Colore fascia: </string>
+    <string name="lbl_piadine_num_text">Tot Piadine: </string>
+    <string name="btn_scan_text">Scan QR code</string>
 </resources>

@@ -18,7 +18,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     private RecyclerViewClickListener mListener;
     private List<Ordine> mData = new ArrayList<>();
 
-    //Data passed in constructor
     public OrdersAdapter(RecyclerViewClickListener listener)
     {
         mListener = listener;
