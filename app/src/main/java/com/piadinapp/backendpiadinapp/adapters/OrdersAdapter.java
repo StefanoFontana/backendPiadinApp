@@ -31,6 +31,14 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         notifyDataSetChanged();
     }
 
+    public Ordine getOrderFromPosition(int position)
+    {
+        if(position < 0 || position >= mData.size())
+            return null;
+
+        return mData.get(position);
+    }
+
     @NonNull
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)

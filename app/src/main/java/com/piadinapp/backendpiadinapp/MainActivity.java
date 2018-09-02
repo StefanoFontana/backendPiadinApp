@@ -1,7 +1,9 @@
 package com.piadinapp.backendpiadinapp;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,13 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.piadinapp.backendpiadinapp.frags.ContentRequestListener;
 import com.piadinapp.backendpiadinapp.frags.OrderListFragment;
 import com.piadinapp.backendpiadinapp.model.Ordine;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,ContentRequestListener {
+
+    private static final String ORDER_EXTRA = "selected_order";
 
     private Toolbar mToolbar;
     private OrderListFragment mFragOrderList;
@@ -71,8 +76,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Fragment fragment = mFragManager.findFragmentById(R.id.flFragContainer);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if(fragment != null && !(fragment instanceof OrderListFragment)) {
+            mFragTransaction = mFragManager.beginTransaction();
+            mFragTransaction.remove(fragment);
+            mFragTransaction.commit();
         } else {
             super.onBackPressed();
         }
@@ -111,4 +122,16 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    //FRAGMENTS CALLBACK---------------------------------------
+    @Override
+    //Called whe user selects an order from order list
+    public void onOrderSelected(Ordine selected)
+    {
+        //todo open order details act
+        Intent detailsIntent = new Intent(this,OrderDetailsActivity.class);
+        detailsIntent.putExtra(ORDER_EXTRA,selected);
+        startActivity(detailsIntent);
+    }
+    //--------------------------------------------------------
 }

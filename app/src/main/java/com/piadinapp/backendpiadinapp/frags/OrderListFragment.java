@@ -1,6 +1,8 @@
 package com.piadinapp.backendpiadinapp.frags;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,9 +23,9 @@ import java.util.ArrayList;
  * List of the orders fragment
  */
 public class OrderListFragment extends Fragment {
-    private ArrayList<Ordine> mOrderList;
     private RecyclerView mRvOrders;
     private OrdersAdapter mOrdersAdapter;
+    private ContentRequestListener mContentListener;
 
     public OrderListFragment()
     {
@@ -40,11 +42,15 @@ public class OrderListFragment extends Fragment {
         RecyclerViewClickListener listener = new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(view.getContext(),"Position " + position,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(view.getContext(),"Position " + position,Toast.LENGTH_SHORT).show();
+                Ordine selected = mOrdersAdapter.getOrderFromPosition(position);
+                if(selected == null)
+                    return;
+
+                mContentListener.onOrderSelected(selected);
             }
         };
 
-        mOrderList = new ArrayList<>();
         //Fill recycler view
         mRvOrders = (RecyclerView) view.findViewById(R.id.rvOrderList);
         mRvOrders.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -52,6 +58,13 @@ public class OrderListFragment extends Fragment {
         mRvOrders.setAdapter(mOrdersAdapter);
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mContentListener = (ContentRequestListener) activity;
     }
 
     public void onOrderListChanged(ArrayList<Ordine> newList)

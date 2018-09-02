@@ -1,6 +1,11 @@
 package com.piadinapp.backendpiadinapp.model;
 
-public class Ordine {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.piadinapp.backendpiadinapp.adapters.OrdersAdapter;
+
+public class Ordine implements Parcelable {
     private int id;
     private String email;
     private String phone;
@@ -58,4 +63,53 @@ public class Ordine {
     {
         return fasciaColor;
     }
+
+    //PARCELABLE METHODS---------------------------------------------
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        dest.writeInt(id);
+        dest.writeString(email);
+        dest.writeString(phone);
+        dest.writeString(registerDate);
+        dest.writeFloat(price);
+        dest.writeString(elementsDescription);
+        dest.writeString(note);
+        dest.writeString(fasciaNumber);
+        dest.writeInt(fasciaColor);
+    }
+
+    public static final Parcelable.Creator<Ordine> CREATOR = new Parcelable.Creator<Ordine>() {
+        @Override
+        public Ordine createFromParcel(Parcel source)
+        {
+            return new Ordine(source);
+        }
+
+        @Override
+        public Ordine[] newArray(int size) {
+            return new Ordine[size];
+        }
+    };
+
+    //Usato dal creator di Parcelable
+    private Ordine(Parcel in)
+    {
+        id = in.readInt();
+        email = in.readString();
+        phone = in.readString();
+        registerDate = in.readString();
+        price = in.readFloat();
+        elementsDescription = in.readString();
+        note = in.readString();
+        fasciaNumber = in.readString();
+        fasciaColor = in.readInt();
+    }
+    //----------------------------------------------------------------
 }
