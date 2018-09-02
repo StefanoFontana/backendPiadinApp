@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".OrderDetailsActivity"
+    tools:showIn="@layout/activity_order_details">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_id_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_date_text"
+            android:layout_alignBaseline="@+id/tvId"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_email_text"
+            android:layout_below="@+id/tvId"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_phone_text"
+            android:layout_below="@+id/tvEmail"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/tvFascia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_fascia_text"
+            android:layout_alignBaseline="@+id/tvEmail"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/tvColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_color_text"
+            android:layout_alignBaseline="@+id/tvPhone"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/tvNumPiadine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rvPiadineList"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/lbl_piadine_num_text"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnScanQr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_scan_text"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPiadineList"
+            android:layout_width="match_parent"
+            android:layout_height="313dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="67dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"/>
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
