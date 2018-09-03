@@ -3,4 +3,30 @@
     <string name="action_settings">Settings</string>
 
     <string name="scan_qr_btn_str">Scan QR code</string>
+    <string name="title_activity_main">Gestione Ordini</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!-- Navigation drawer -->
+    <string name="nav_header_title">Administrator</string>
+    <string name="nav_header_subtitle">administrator@piadinapp.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_orders">Gestione Ordini</string>
+    <string name="nav_fasce">Impostazioni Fasce</string>
+    <!-- Order item -->
+    <string name="id_placeholder">Order ID: 0</string>
+    <string name="date_placeholder">01/01/2018</string>
+    <string name="email_placeholder">email@email.com</string>
+    <string name="phone_placeholder">1234567890</string>
+    <string name="num_piadine_placeholder">Piadine: 1</string>
+    <string name="title_activity_order_details">OrderDetailsActivity</string>
+    <!-- Order details act -->
+    <string name="title_details_order">Dettagli Ordine</string>
+    <string name="lbl_id_text">Ordine ID: </string>
+    <string name="lbl_email_text">Email: </string>
+    <string name="lbl_phone_text">Telefono: </string>
+    <string name="lbl_date_text">Data: </string>
+    <string name="lbl_fascia_text">Fascia oraria: </string>
+    <string name="lbl_color_text">Colore fascia: </string>
+    <string name="lbl_piadine_num_text">Tot Piadine:</string>
+    <string name="btn_scan_text">Accredita Piadine</string>
 </resources>
