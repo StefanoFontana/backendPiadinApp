@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity
     private static final String JSON_NOTE_FIELD        = "note";
     private static final String JSON_FASCIA_FIELD      = "fascia";
     private static final String JSON_COLOR_FIELD       = "colore_fascia";
+    private static final String JSON_START_FIELD       = "orario_inizio";
+    private static final String JSON_END_FIELD         = "orario_fine";
 
     private Toolbar mToolbar;
     private OrderListFragment mFragOrderList;
@@ -80,15 +82,7 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
 
         updateOrderList();
-
-        //Test orders
-        //todo update orders from server
-        Ordine test1 = new Ordine(1,"stefon1992@gmail.com","34237374406","22/03/2019",
-                5.5f,"[Numero: 02; Piadina; Normale; Speck, Scamorza, Rucola; 5.0; 1]","Nota1","3",1);
-        Ordine test2 = new Ordine(2,"stefon1992@gmail.com","34237374406","01/09/2018",3f,"Pippo2","Nota2","5",2);
         ArrayList<Ordine> list = new ArrayList<>();
-        list.add(test1);
-        list.add(test2);
         mFragOrderList.onOrderListChanged(list);
     }
 
@@ -176,7 +170,7 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Ordine> list = new ArrayList<>();
 
         int id,colore;
-        String mail,phone,data,descrizione,nota,fascia;
+        String mail,phone,data,descrizione,nota,fascia, orarioInizio, orarioFine;
         double prezzo;
 
         Ordine ordine;
@@ -193,8 +187,11 @@ public class MainActivity extends AppCompatActivity
                 prezzo = obj.getDouble(JSON_PREZZO_FIELD);
                 fascia = obj.getString(JSON_FASCIA_FIELD);
                 colore = obj.getInt(JSON_COLOR_FIELD);
+                orarioInizio = obj.getString(JSON_START_FIELD);
+                orarioFine = obj.getString(JSON_END_FIELD);
 
-                ordine = new Ordine(id,mail,phone,data,(float)prezzo,descrizione,nota,fascia,colore);
+                ordine = new Ordine(id,mail,phone,data,(float)prezzo,
+                        descrizione, nota, fascia, colore, orarioInizio, orarioFine);
                 list.add(ordine);
             }
         } catch (JSONException e) {

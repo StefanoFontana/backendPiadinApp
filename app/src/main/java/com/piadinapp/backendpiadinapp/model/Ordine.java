@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ordine implements Parcelable {
-    private static final String ITEM_SEPARATOR = "-";
+    private static final String ITEM_SEPARATOR = " - ";
     private static final String PROPERTY_SEPARATOR = ";";
     private static final int ITEM_NAME_ID        = 0;
     private static final int ITEM_TYPE_ID        = 1;
@@ -28,9 +28,11 @@ public class Ordine implements Parcelable {
     private String note;
     private String fasciaNumber;
     private int fasciaColor;
+    private String startOrdine;
+    private String endOrdine;
 
     public Ordine(int id,String mail,String phone,String date,float price,String descr,String note,
-                  String fascia,int color)
+                  String fascia,int color, String startOrdine, String endOrdine)
     {
         this.id = id;
         email = mail;
@@ -41,6 +43,8 @@ public class Ordine implements Parcelable {
         this.note = note;
         fasciaNumber = fascia;
         fasciaColor = color;
+        this.startOrdine = startOrdine;
+        this.endOrdine = endOrdine;
     }
 
     public int getId()
@@ -76,7 +80,21 @@ public class Ordine implements Parcelable {
     {
         return fasciaColor;
     }
+    public String getStartOrdine() {
+        return startOrdine;
+    }
 
+    public void setStartOrdine(String startOrdine) {
+        this.startOrdine = startOrdine;
+    }
+
+    public String getEndOrdine() {
+        return endOrdine;
+    }
+
+    public void setEndOrdine(String endOrdine) {
+        this.endOrdine = endOrdine;
+    }
     //PARCELABLE METHODS---------------------------------------------
     @Override
     public int describeContents()
@@ -96,6 +114,8 @@ public class Ordine implements Parcelable {
         dest.writeString(note);
         dest.writeString(fasciaNumber);
         dest.writeInt(fasciaColor);
+        dest.writeString(startOrdine);
+        dest.writeString(endOrdine);
     }
 
     public static final Parcelable.Creator<Ordine> CREATOR = new Parcelable.Creator<Ordine>() {
@@ -123,6 +143,8 @@ public class Ordine implements Parcelable {
         note = in.readString();
         fasciaNumber = in.readString();
         fasciaColor = in.readInt();
+        startOrdine = in.readString();
+        endOrdine = in.readString();
     }
     //----------------------------------------------------------------
 
@@ -152,5 +174,14 @@ public class Ordine implements Parcelable {
         }
 
         return finalList;
+    }
+
+    public int getQuantity(){
+        int quantita = 0;
+        ArrayList<OrdineItem> elementi = getOrderItems();
+        for(OrdineItem elemento: elementi){
+            quantita = quantita + elemento.getQuantity();
+        }
+        return quantita;
     }
 }

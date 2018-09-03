@@ -16,6 +16,7 @@ import java.util.List;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
     private RecyclerViewClickListener mListener;
+    private LayoutInflater mInflater;
     private List<Ordine> mData = new ArrayList<>();
 
     public OrdersAdapter(RecyclerViewClickListener listener)
@@ -23,8 +24,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         mListener = listener;
     }
 
-    public void updateData(List<Ordine> dataset)
-    {
+    public void updateData(List<Ordine> dataset) {
         mData.clear();
         mData.addAll(dataset);
         notifyDataSetChanged();
@@ -42,8 +42,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item,parent,false);
-
+        mInflater = LayoutInflater.from(parent.getContext());
+        View view = mInflater.inflate(R.layout.order_item, parent, false);
         return new OrderViewHolder(view,mListener);
     }
 
@@ -55,7 +55,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         holder.setDate(currentOrder.getRegisterDate());
         holder.setEmail(currentOrder.getEmail());
         holder.setPhone(currentOrder.getPhone());
-        holder.setPiadineNumber(3); //todo get number piadine da ordine
+        holder.setPiadineNumber(currentOrder.getQuantity());
+        holder.setOrarioInizio(currentOrder.getStartOrdine());
+        holder.setOrarioFine(currentOrder.getEndOrdine());
     }
 
     @Override
@@ -71,6 +73,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         private TextView mEmail;
         private TextView mPhone;
         private TextView mPiadineNum;
+        private TextView mOrarioInizio;
+        private TextView mOrarioFine;
+
         private RecyclerViewClickListener mListener;
 
         public OrderViewHolder(View itemView, RecyclerViewClickListener listener)
@@ -82,13 +87,15 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             mEmail = (TextView) itemView.findViewById(R.id.tvEmail);
             mPhone = (TextView) itemView.findViewById(R.id.tvPhone);
             mPiadineNum = (TextView) itemView.findViewById(R.id.tvNumPiadine);
+            mOrarioInizio = itemView.findViewById(R.id.orario_inizio);
+            mOrarioFine = itemView.findViewById(R.id.orario_fine);
             mListener = listener;
             itemView.setOnClickListener(this);
         }
 
         public void setId(int id)
         {
-            String finaTxt = "Order ID: " + String.valueOf(id);
+            String finaTxt = "Ordine n°: " + String.valueOf(id);
             mId.setText(finaTxt);
         }
         public void setDate(String date)
@@ -108,6 +115,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             String finalTxt = "Piadine: " + String.valueOf(number);
             mPiadineNum.setText(finalTxt);
         }
+        public void setOrarioInizio(String orario){ mOrarioInizio.setText(orario);}
+        public void setOrarioFine(String orario){ mOrarioFine.setText(orario);}
 
         @Override
         public void onClick(View v)

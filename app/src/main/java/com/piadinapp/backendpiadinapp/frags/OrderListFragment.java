@@ -2,10 +2,13 @@ package com.piadinapp.backendpiadinapp.frags;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +31,7 @@ public class OrderListFragment extends Fragment {
     private OrdersAdapter mOrdersAdapter;
     private ContentRequestListener mContentListener;
     private SwipeRefreshLayout mSwipeRefresh;
+    private Context mContext;
 
     public OrderListFragment()
     {
@@ -39,6 +43,7 @@ public class OrderListFragment extends Fragment {
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_order_list,container,false);
+        mContext = container.getContext();
 
         //Recycler view click listener
         RecyclerViewClickListener listener = new RecyclerViewClickListener() {
@@ -58,6 +63,10 @@ public class OrderListFragment extends Fragment {
         mRvOrders.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mOrdersAdapter = new OrdersAdapter(listener);
         mRvOrders.setAdapter(mOrdersAdapter);
+
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.piadina_divider));
+        mRvOrders.addItemDecoration(itemDecorator);
 
         //Setup swipe refresh view
         mSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.srlOrderRefresh);

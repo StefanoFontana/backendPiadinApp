@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -72,11 +74,16 @@ public class OrderDetailsActivity extends AppCompatActivity {
         finalText = getResources().getString(R.string.lbl_color_text) + String.valueOf(mOrdine.getFasciaColor());
         color.setText(finalText);
 
-        ArrayList<OrdineItem> itemsList = mOrdine.getOrderItems();
+        TextView ordineInizio = findViewById(R.id.orario_inizio);
+        ordineInizio.setText(mOrdine.getStartOrdine());
 
+        TextView ordineFine = findViewById(R.id.orario_fine);
+        ordineFine.setText(mOrdine.getEndOrdine());
+
+        ArrayList<OrdineItem> itemsList = mOrdine.getOrderItems();
         TextView numPiade = (TextView) findViewById(R.id.tvNumPiadine);
-        int totPiade = itemsList.size();
-        finalText = getResources().getString(R.string.lbl_piadine_num_text) + String.valueOf(totPiade);
+        int totPiade = mOrdine.getQuantity();
+        finalText = "Numero Piadine: " + String.valueOf(totPiade);
         numPiade.setText(finalText);
 
         //Fill item recycler view
@@ -85,6 +92,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
         mItemsAdapter = new OrderItemAdapter();
         mItemsAdapter.updateData(itemsList);
         mRvItems.setAdapter(mItemsAdapter);
+
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.piadina_divider));
+        mRvItems.addItemDecoration(itemDecorator);
 
         //Scan qr code button
         Button scanBtn = (Button) findViewById(R.id.btnScanQr);
@@ -108,7 +119,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         }
 
         if(result.getContents() == null) {
-            Toast.makeText(this,"QR scan cancelled",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"QR scan cancellato",Toast.LENGTH_SHORT).show();
         } else {
             String[] resultArray = result.getContents().split(SEPARATOR_QR_CODE);
             //updateUserTimbriRequest(resultArray[0],resultArray[1]);

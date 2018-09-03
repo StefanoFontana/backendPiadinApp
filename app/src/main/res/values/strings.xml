@@ -27,6 +27,6 @@
     <string name="lbl_date_text">Data: </string>
     <string name="lbl_fascia_text">Fascia oraria: </string>
     <string name="lbl_color_text">Colore fascia: </string>
-    <string name="lbl_piadine_num_text">Tot Piadine: </string>
-    <string name="btn_scan_text">Scan QR code</string>
+    <string name="lbl_piadine_num_text">Tot Piadine:</string>
+    <string name="btn_scan_text">Accredita Piadine</string>
 </resources>
